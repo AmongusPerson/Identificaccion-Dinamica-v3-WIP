@@ -1,0 +1,17 @@
+body {
+    background-image: url(papel.jpg);
+    background-size: 100%;
+}
+
+label {
+    background-color: rgba(123, 191, 255, 0.822);
+}
+
+#ad {
+    cursor: pointer;
+    background-color: rgba(145, 255, 123, 0.666);
+}
+
+#ad:hover {
+    background-color: rgb(145, 255, 123);
+}

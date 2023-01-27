@@ -1,0 +1,77 @@
+<html>
+<head>
+
+<title> Detección de Objetos Dinámica </title>
+<link rel="icon" href="Lupa.png">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="style.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.0.0/p5.js"></script>
+<script src="https://unpkg.com/ml5@latest/dist/ml5.min.js"></script>
+<script src="main.js"></script>
+
+</head>
+<body>
+<center>
+<h2><label style="background-color: rgba(246, 255, 123, 0.822);"> Detección de Objetos Dinámica </label></h2>
+<br><br>
+<button onclick="start()" style="font-size: 140%;"  id="ad" class="btn btn-succes"> Iniciar</button>
+<br><br>
+<span>
+<label id="estado">Estado: No iniciado</label> <label id="detectados"> 0 Objetos detectados</label>
+</span>
+</center>
+<script>var num = 0;
+    var arr = [];
+    var tex = "";
+    
+    function preload() {
+        video = createVideo("video.mp4");
+    }
+    
+    function setup() {
+        canvas = createCanvas(500,500);
+        canvas.center();
+        canvas.hide();
+    }
+    
+    function start() {
+        ObjectDetector = ml5.ObjectDetector("CocoSSD",modelLoaded);
+        document.getElementById("estado").innerHTML = "Cargando...";
+    }
+    
+    function modelLoaded() {
+        console.log("modelLoaded");
+        tex = true;
+        video.loop();
+        video.speed(1);
+        video.volume(0); 
+    }
+    
+    function gotResult(result,error) {
+        if (error) {
+            console.log(error);
+        } else{
+            console.log(result); 
+            arr = result;
+        }
+    }
+    
+    function draw() {
+        image(video,0,0,500,500);
+        if (tex != "") {
+            ObjectDetector.detect(video,gotResult);
+            for (var i = 0; i < arr.length; i++) {
+                document.getElementById("detectados").innerHTML = arr.length + " Objetos detectados";
+                fill("#FF0000");
+                por = floor(arr[i].confidence*100);
+                text(arr[i].label+" "+por+"%",arr[i].x+20,arr[i].y+20);
+                noFill();
+                stroke("#FF0000");
+                rect(arr[i].x,arr[i].y,arr[i].height,arr[i].width);
+            }
+        }
+    }</script>
+</body>
+</html> 
